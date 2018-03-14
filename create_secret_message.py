@@ -1,5 +1,6 @@
 import os
 from shutil import copyfile
+import random
 
 def getCharacterImages(image_directory):
     character_image_files = os.listdir(image_directory)
@@ -43,6 +44,13 @@ def makeMessageImages(image_directory, target_directory, message_image_mapping):
 
     return
 
+def makeEncodingPrefix(max_int):
+    prefix = random.randint(1, max_int)
+    if prefix < 10:
+        prefix = ("0" + str(prefix))
+        return prefix
+    return str(prefix)
+
 def encodeMessage(message, target_directory):
     original_wd = os.getcwd()
     program_wd = "/Users/messrobd 1/github/Lesson4-SecretMsg"
@@ -54,9 +62,18 @@ def encodeMessage(message, target_directory):
 
     makeMessageImages("alphabet", target_directory, message_image_mapping)
 
+    message_images = os.listdir(target_directory)
+    max_int = len(message_images)
+    os.chdir(target_directory)
+    for image in message_images:
+        prefix = makeEncodingPrefix(max_int)
+        encoded_name = prefix + image
+        os.rename(image, encoded_name)
+
+    return
 
 #execution
-message = "you smell"
-target_directory = "message"
+message = "egad you smell like a horse"
+target_directory = "message_encoded"
 
 encodeMessage(message, target_directory)
