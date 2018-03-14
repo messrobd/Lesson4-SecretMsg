@@ -1,12 +1,7 @@
 import os
 
-original_wd = os.getcwd()
-program_wd = "/Users/messrobd 1/github/Lesson4-SecretMsg"
-
-os.chdir(program_wd)
-
 def getCharacterImages(image_directory):
-    character_image_files = os.listdir("alphabet")
+    character_image_files = os.listdir(image_directory)
 
     image_extension, image_extension_length = ".jpg", 4
 
@@ -35,9 +30,8 @@ def makeMessageImageMapping(message, alphabet_images):
 
     return message_character_images, message_image_names
 
-def makeMessageImages(image_directory, message_image_mapping):
+def makeMessageImages(image_directory, target_directory, message_image_mapping):
     message_character_images, message_image_names = message_image_mapping
-    target_directory = os.getcwd()
 
     for source_name, target_name in zip(message_character_images, message_image_names):
         source_name_path = "{0}/{1}".format(image_directory, source_name)
@@ -45,6 +39,18 @@ def makeMessageImages(image_directory, message_image_mapping):
         os.rename(source_name_path, target_name_path)
 
     return
+
+def encodeMessage(message, target_directory):
+    original_wd = os.getcwd()
+    program_wd = "/Users/messrobd 1/github/Lesson4-SecretMsg"
+
+    os.chdir(program_wd)
+    character_image_files = getCharacterImages("alphabet")
+    alphabet_images = makeAlphabetImageDict(character_image_files)
+    message_image_mapping = makeMessageImageMapping(message, alphabet_images)
+
+    makeMessageImages("alphabet", target_directory, message_image_mapping)
+
 
 #execution
 message = "you smell"
