@@ -1,4 +1,5 @@
 import os
+from shutil import copyfile
 
 def getCharacterImages(image_directory):
     character_image_files = os.listdir(image_directory)
@@ -20,7 +21,7 @@ def makeAlphabetImageDict(character_image_files):
 
     return alphabet_images
 
-def makeMessageImageMapping(message, alphabet_images):
+def makeMessageImageMapping(message, alphabet_images, character_image_files):
     message_character_images = []
     message_image_names = []
 
@@ -33,10 +34,12 @@ def makeMessageImageMapping(message, alphabet_images):
 def makeMessageImages(image_directory, target_directory, message_image_mapping):
     message_character_images, message_image_names = message_image_mapping
 
+    os.mkdir(target_directory)
+
     for source_name, target_name in zip(message_character_images, message_image_names):
         source_name_path = "{0}/{1}".format(image_directory, source_name)
         target_name_path = "{0}/{1}".format(target_directory, target_name)
-        os.rename(source_name_path, target_name_path)
+        copyfile(source_name_path, target_name_path)
 
     return
 
@@ -47,10 +50,13 @@ def encodeMessage(message, target_directory):
     os.chdir(program_wd)
     character_image_files = getCharacterImages("alphabet")
     alphabet_images = makeAlphabetImageDict(character_image_files)
-    message_image_mapping = makeMessageImageMapping(message, alphabet_images)
+    message_image_mapping = makeMessageImageMapping(message, alphabet_images, character_image_files)
 
     makeMessageImages("alphabet", target_directory, message_image_mapping)
 
 
 #execution
 message = "you smell"
+target_directory = "message"
+
+encodeMessage(message, target_directory)
