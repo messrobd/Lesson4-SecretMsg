@@ -70,6 +70,8 @@ def encodeMessage(message, target_directory):
         encoded_name = prefix + image
         os.rename(image, encoded_name)
 
+    os.chdir(original_wd)
+
     return
 
 #execution
