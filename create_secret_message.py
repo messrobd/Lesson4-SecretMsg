@@ -44,12 +44,24 @@ def makeMessageImages(image_directory, target_directory, message_image_mapping):
 
     return
 
-def makeEncodingPrefix(max_int):
-    prefix = random.randint(1, max_int)
-    if prefix < 10:
-        prefix = ("0" + str(prefix))
-        return prefix
-    return str(prefix)
+def makeEncodingPrefixes(message_images):
+    message_prefixes = []
+    for index, image in enumerate(message_images):
+        if index < 10:
+            index = ("0" + str(index))
+        else:
+            str(index)
+        message_prefixes.append(index)
+
+    return message_prefixes
+
+def getEncodingPrefix(message_prefixes):
+    prefix_index = random.randint(0, len(message_prefixes)-1)
+    prefix = message_prefixes[prefix_index]
+    del message_prefixes[prefix_index]
+
+    return prefix
+
 
 def encodeMessage(message, target_directory):
     original_wd = os.getcwd()
@@ -61,12 +73,12 @@ def encodeMessage(message, target_directory):
     message_image_mapping = makeMessageImageMapping(message, alphabet_images, character_image_files)
 
     makeMessageImages("alphabet", target_directory, message_image_mapping)
-
     message_images = os.listdir(target_directory)
-    max_int = len(message_images)
+    message_prefixes = makeEncodingPrefixes(message_images)
+
     os.chdir(target_directory)
     for image in message_images:
-        prefix = makeEncodingPrefix(max_int)
+        prefix = getEncodingPrefix(message_prefixes)
         encoded_name = prefix + image
         os.rename(image, encoded_name)
 
@@ -75,7 +87,7 @@ def encodeMessage(message, target_directory):
     return
 
 #execution
-message = "egad you smell like a horse"
+message = "you smell"
 target_directory = "message_encoded"
 
 encodeMessage(message, target_directory)
