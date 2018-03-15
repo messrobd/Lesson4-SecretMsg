@@ -62,7 +62,6 @@ def getEncodingPrefix(message_prefixes):
 
     return prefix
 
-
 def encodeMessage(message, target_directory):
     original_wd = os.getcwd()
     program_wd = "/Users/messrobd 1/github/Lesson4-SecretMsg"
